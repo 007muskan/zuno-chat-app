@@ -19,7 +19,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "serve-favicon": "^2.5.1",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "colors": "^1.4.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
