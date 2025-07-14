@@ -39,7 +39,7 @@ const SignUpForm = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setPic(data.url.toString());
+          setPic(data.secure_url);
           setLoading(false);
         })
         .catch((err) => {
