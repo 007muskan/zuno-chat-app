@@ -9,6 +9,8 @@ import UserListItem from "./UserListItem";
 import MyProfileModal from "./MyProfileModal";
 import { getSender } from "../config/ChatLogics";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 const Header = () => {
   const {
     user,
@@ -50,7 +52,7 @@ const Header = () => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `http://localhost:5001/api/user?search=${search}`,
+        `${BASE_URL}/api/user?search=${search}`,
         config
       );
 
@@ -83,7 +85,7 @@ const Header = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5001/api/chat",
+        `${BASE_URL}/api/chat`,
         { userId },
         config
       );

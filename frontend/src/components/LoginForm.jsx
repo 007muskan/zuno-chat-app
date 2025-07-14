@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -28,7 +30,7 @@ const LoginForm = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5001/api/user/login",
+        `${BASE_URL}/api/user/login`,
         { email, password },
         config
       );

@@ -6,7 +6,8 @@ import io from "socket.io-client";
 import axios from "axios";
 import ProfileModal from "./ProfileModal";
 
-const ENDPOINT = "http://localhost:5001";
+// const ENDPOINT = "http://localhost:5001";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -19,7 +20,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
-
   const messagesEndRef = useRef(null);
   const menuRef = useRef();
 
@@ -27,7 +27,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     ChatState();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(BASE_URL);
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
@@ -39,7 +39,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
 
-  console.log(notification,'------------')
+  console.log(notification, "------------");
   useEffect(() => {
     const messageListener = (newMessageReceived) => {
       if (
@@ -83,7 +83,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       };
       setLoading(true);
       const { data } = await axios.get(
-        `${ENDPOINT}/api/message/${selectedChat._id}`,
+        `${BASE_URL}/api/message/${selectedChat._id}`,
         config
       );
       setMessages(data);
@@ -105,7 +105,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
         const { data } = await axios.post(
-          `${ENDPOINT}/api/message`,
+          `${BASE_URL}/api/message`,
           { content: newMessage, chatId: selectedChat },
           config
         );
@@ -156,7 +156,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       };
 
       await axios.delete(
-        `${ENDPOINT}/api/message/clear/${selectedChat._id}`,
+        `${BASE_URL}/api/message/clear/${selectedChat._id}`,
         config
       );
       setMessages([]); // Clear messages from UI
@@ -165,8 +165,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.error("Failed to clear chat:", error);
     }
   };
-  
-  
 
   return selectedChat ? (
     <div className="flex flex-col h-screen w-full bg-white rounded-xl overflow-hidden">
@@ -271,7 +269,5 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     </div>
   );
 };
-
-
 
 export default SingleChat;

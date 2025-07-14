@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 const SignUpForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -73,7 +75,7 @@ const SignUpForm = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5001/api/user",
+        `${BASE_URL}/api/user`,
         { name, email, password, pic },
         config
       );

@@ -6,6 +6,8 @@ import { ChatState } from "../Context/ChatProvider";
 import axios from "axios";
 import { toast } from "sonner";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 const CreateGroupModal = ({ isOpen, onClose }) => {
   const [groupName, setGroupName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -26,7 +28,7 @@ const CreateGroupModal = ({ isOpen, onClose }) => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5001/api/user?search=${query}`,
+        `${BASE_URL}/api/user?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -58,7 +60,7 @@ const CreateGroupModal = ({ isOpen, onClose }) => {
         },
       };
       const { data } = await axios.post(
-        `http://localhost:5001/api/chat/group`,
+        `${BASE_URL}/api/chat/group`,
         {
           name: groupName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),
