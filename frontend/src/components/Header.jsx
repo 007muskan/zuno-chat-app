@@ -10,6 +10,7 @@ import MyProfileModal from "./MyProfileModal";
 import { getSender } from "../config/ChatLogics";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+console.log("BASE_URL in Header.jsx:", BASE_URL);
 
 const Header = () => {
   const {
