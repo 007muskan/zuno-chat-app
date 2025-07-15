@@ -25,8 +25,7 @@ const UserList = ({ fetchAgain }) => {
         },
       };
       const { data } = await axios.get(
-        `${BASE_URL}/api/user/login`,
-        { email, password },
+        `${BASE_URL}/api/chat`,
         config
       );
       setChats(data);
