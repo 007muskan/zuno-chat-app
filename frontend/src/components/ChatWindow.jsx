@@ -9,7 +9,7 @@ const ChatWindow = ({ fetchAgain, setFetchAgain }) => {
     <div
       className="
       flex flex-col items-start 
-      p-3 bg-white w-[1050px] 
+      p-3 bg-white w-[1120px] 
       rounded-lg border border-gray-200 mt-3 ml-5
     "
     >

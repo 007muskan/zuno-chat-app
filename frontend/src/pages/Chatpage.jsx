@@ -13,7 +13,7 @@ const Chatpage = () => {
     <div className="h-screen w-screen flex flex-col overflow-hidden">
       <Header />
       <div className="flex flex-1">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <UserList fetchAgain={fetchAgain} />
         <div className="flex flex-col flex-1">
           <ChatWindow fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />

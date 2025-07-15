@@ -13,6 +13,7 @@ const UserList = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState(null);
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -24,10 +25,7 @@ const UserList = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(
-        `${BASE_URL}/api/chat`,
-        config
-      );
+      const { data } = await axios.get(`${BASE_URL}/api/chat`, config);
       setChats(data);
     } catch (error) {
       toast.error("Failed to fetch chats");
@@ -45,6 +43,14 @@ const UserList = ({ fetchAgain }) => {
       navigate("/chats");
     }
   };
+
+  // 🔍 Filter chats based on searchTerm
+  const filteredChats = chats?.filter((chat) => {
+    const displayName = chat.isGroupChat
+      ? chat.chatName
+      : getSender(loggedUser, chat.users);
+    return displayName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="w-[360px] bg-white/70 backdrop-blur-md p-6 border-r border-gray-200 h-screen shadow-xl rounded-r-2xl overflow-hidden">
@@ -64,55 +70,61 @@ const UserList = ({ fetchAgain }) => {
       <input
         type="text"
         placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         className="w-full px-4 py-2 mb-6 rounded-full border border-gray-300 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400 transition duration-200 shadow-sm"
       />
 
       <div className="space-y-3 overflow-y-auto max-h-[78vh] pr-1 custom-scrollbar">
-        {chats?.map((chat) => {
-          const isSelected = selectedChat?._id === chat._id;
-          const displayName = chat.isGroupChat
-            ? chat.chatName
-            : getSender(loggedUser, chat.users);
-          const profilePic = chat.isGroupChat
-            ? `https://api.dicebear.com/6.x/bottts/svg?seed=${displayName}`
-            : chat.users.find((u) => u._id !== loggedUser._id)?.pic;
+        {filteredChats?.length > 0 ? (
+          filteredChats.map((chat) => {
+            const isSelected = selectedChat?._id === chat._id;
+            const displayName = chat.isGroupChat
+              ? chat.chatName
+              : getSender(loggedUser, chat.users);
+            const profilePic = chat.isGroupChat
+              ? `https://api.dicebear.com/6.x/bottts/svg?seed=${displayName}`
+              : chat.users.find((u) => u._id !== loggedUser._id)?.pic;
 
-          return (
-            <div
-              key={chat._id}
-              onClick={() => handleChatClick(chat)}
-              className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 group shadow-sm ${
-                isSelected
-                  ? "bg-gradient-to-r from-purple-500 to-indigo-500 text-white scale-[1.01]"
-                  : "hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 text-gray-800"
-              }`}
-            >
-              <div className="relative">
-                <img
-                  src={profilePic}
-                  alt="avatar"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg group-hover:ring-2 group-hover:ring-purple-400 transition"
-                />
+            return (
+              <div
+                key={chat._id}
+                onClick={() => handleChatClick(chat)}
+                className={`flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 group shadow-sm ${
+                  isSelected
+                    ? "bg-gradient-to-r from-purple-500 to-indigo-500 text-white scale-[1.01]"
+                    : "hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 text-gray-800"
+                }`}
+              >
+                <div className="relative">
+                  <img
+                    src={profilePic}
+                    alt="avatar"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-lg group-hover:ring-2 group-hover:ring-purple-400 transition"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p
+                    className={`font-semibold truncate text-sm ${
+                      isSelected ? "text-white" : "text-gray-800"
+                    }`}
+                  >
+                    {displayName}
+                  </p>
+                  <p
+                    className={`text-xs truncate ${
+                      isSelected ? "text-purple-100" : "text-gray-500"
+                    }`}
+                  >
+                    {chat.latestMessage?.content || "No messages yet"}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p
-                  className={`font-semibold truncate text-sm ${
-                    isSelected ? "text-white" : "text-gray-800"
-                  }`}
-                >
-                  {displayName}
-                </p>
-                <p
-                  className={`text-xs truncate ${
-                    isSelected ? "text-purple-100" : "text-gray-500"
-                  }`}
-                >
-                  {chat.latestMessage?.content || "No messages yet"}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <p className="text-sm text-gray-500">No chats found.</p>
+        )}
       </div>
 
       <CreateGroupModal
