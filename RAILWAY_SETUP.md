@@ -6,11 +6,13 @@
 - Go to [railway.app](https://railway.app)
 - Sign up with your GitHub account
 
-### 2. Deploy Project
+### 2. Deploy Project - IMPORTANT STEPS
 1. Click **"New Project"**
 2. Select **"Deploy from GitHub repo"**
 3. Choose your **zuno repository**
-4. Set **Root Directory** to `backend`
+4. **CRITICAL**: In the deployment settings:
+   - Set **Root Directory** to `backend`
+   - Or create a new service and select only the backend folder
 5. Railway will auto-detect Node.js and start building
 
 ### 3. Add Environment Variables

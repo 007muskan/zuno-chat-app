@@ -1,0 +1,14 @@
+RAILWAY ENVIRONMENT VARIABLES TO SET:
+
+Copy and paste these in Railway Dashboard > Variables:
+
+PORT=5001
+MONGO_URI=mongodb+srv://muskannsiingh:keHXrABEMzv8AkLA@cluster0.v96qtc6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=matcha
+NODE_ENV=production
+FRONTEND_URL=https://your-vercel-app.vercel.app
+
+IMPORTANT: 
+- Don't include quotes around the values
+- Replace "your-vercel-app" with your actual Vercel URL after frontend deployment
+- Make sure there are no extra spaces
