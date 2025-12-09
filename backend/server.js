@@ -6,7 +6,6 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
-const path = require("path");
 
 dotenv.config();
 
@@ -41,26 +40,24 @@ app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
-// Serve static files in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-  
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.status(200).json({ 
-      message: "Zuno Chat API is running successfully! 🚀",
-      status: "healthy",
-      timestamp: new Date().toISOString()
-    });
+// API routes only - frontend will be served by Vercel
+app.get("/", (req, res) => {
+  res.status(200).json({ 
+    message: "Zuno Chat API is running successfully! 🚀",
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: "/health",
+      users: "/api/user",
+      chats: "/api/chat", 
+      messages: "/api/message"
+    }
   });
+});
 
-  app.get("/health", (req, res) => {
-    res.status(200).json({ status: "OK" });
-  });
-}
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
 
 // Error Handling middlewares
 app.use(notFound);
