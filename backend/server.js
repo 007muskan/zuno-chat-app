@@ -25,10 +25,9 @@ const corsOptions = {
     process.env.FRONTEND_URL,
     "http://localhost:3000",
     "http://localhost:5173", // Vite dev server
+    "https://zuno-chat-app.vercel.app", // Your Vercel URL
     /\.vercel\.app$/, // Allow all Vercel preview deployments
-    /\.railway\.app$/, // Allow Railway deployments
-    "https://zuno-frontend.vercel.app", // Add your specific Vercel URL
-    /https:\/\/.*\.vercel\.app$/ // Allow all Vercel subdomains
+    /\.railway\.app$/ // Allow Railway deployments
   ],
   credentials: true,
   optionsSuccessStatus: 200
