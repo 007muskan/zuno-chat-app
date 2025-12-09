@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === "production") {
   );
 } else {
   app.get("/", (req, res) => {
-    res.send("API is running successfully");
+    res.send("Zuno Chat API is running successfully! 🚀");
   });
 }
 
