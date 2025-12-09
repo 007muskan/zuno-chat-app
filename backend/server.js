@@ -9,6 +9,13 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const path = require("path");
 
 dotenv.config();
+
+// Debug logging
+console.log("🔧 Environment check:");
+console.log("PORT:", process.env.PORT);
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+
 connectDB();
 
 const app = express();
@@ -51,7 +58,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on PORT ${PORT}`);
