@@ -51,10 +51,11 @@ const LoginForm = () => {
         e.preventDefault();
         submitHandler();
       }}
+      className="w-full"
     >
       {/* Email Field */}
-      <div className="mb-4 mt-16">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+      <div className="mb-4 mt-10 sm:mt-16">
+        <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
           Email Address <span className="text-red-500">*</span>
         </label>
         <input
@@ -62,13 +63,13 @@ const LoginForm = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter Your Email Address"
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full px-4 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
       {/* Password Field */}
       <div className="mb-6 relative">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
           Password <span className="text-red-500">*</span>
         </label>
         <input
@@ -76,10 +77,10 @@ const LoginForm = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter Password"
-          className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full px-4 py-2 text-sm sm:text-base pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <span
-          className="absolute right-3 top-9 cursor-pointer text-xl text-gray-500"
+          className="absolute right-3 top-[38px] cursor-pointer text-xl text-gray-500"
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
@@ -90,35 +91,33 @@ const LoginForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full py-2 rounded-md transition flex justify-center items-center gap-2 ${
+        className={`w-full py-2 sm:py-2.5 rounded-md transition flex justify-center items-center gap-2 text-white text-sm sm:text-base ${
           loading
             ? "bg-[#7e6f8f] cursor-not-allowed"
-            : "bg-[#5e3a87] hover:bg-[#4b2f70] text-white"
+            : "bg-[#5e3a87] hover:bg-[#4b2f70]"
         }`}
       >
         {loading ? (
-          <>
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
-            </svg>
-          </>
+          <svg
+            className="animate-spin h-5 w-5 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
+          </svg>
         ) : (
           "Login"
         )}

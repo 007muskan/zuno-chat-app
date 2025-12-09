@@ -9,35 +9,32 @@ const Homepage = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
-
     if (user) navigate("/chats");
   }, [navigate]);
 
   return (
     <div
-      className="min-h-screen w-full flex"
+      className="min-h-screen w-full flex flex-col md:flex-row items-center justify-center bg-[#1e0035]"
       style={{
-        backgroundImage: "url('/bground.png')", // replace with your image
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundColor: "#1e0035",
       }}
     >
-      {/* Left: Logo & tagline */}
-      <div className="w-1/2 flex flex-col items-center justify-center p-10 mt-[-250px]">
+      {/* Top Section for Mobile, Left on Desktop */}
+      <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-6 md:px-10 py-8 md:py-16 md:mt-[-250px]">
         <img
           src="/zuno-logo.png"
           alt="ZUNO"
-          className="w-[590px] leading-none"
+          className="w-[180px] mb-[-50px] sm:w-[250px] md:w-[500px] md:mb-[-180px]"
         />
-        <p className="text-white italic text-3xl text-center mt-[-230px] leading-tight ml-22">
+        <p className="text-white italic text-xl sm:text-2xl md:text-3xl text-center leading-tight">
           Chat, but make it unhinged.
         </p>
       </div>
 
-      {/* Right: Form Card */}
-      <div className="w-1/2 flex items-center justify-center mr-28">
-        <div className="bg-white rounded-xl p-8 w-full max-w-[500px] shadow-md h-auto">
+      {/* Form Section */}
+      <div className="w-full  mb-[120px] md:w-1/2 flex items-center justify-center px-4 sm:px-6 md:mr-28  md:mb-0">
+        <div className="bg-white rounded-xl p-6 w-[80%] max-w-sm sm:max-w-md md:max-w-[500px] shadow-md">
           {/* Tab Switch */}
           <div className="flex justify-between mb-6">
             <button

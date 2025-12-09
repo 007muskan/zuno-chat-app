@@ -1,95 +1,97 @@
 const express = require("express");
-const { chats } = require("./data/data");
-const path = require("path");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const connectDB = require("./config/db");
-const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
-const cors = require("cors");
-
-const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
-app.use(cors());
+// CORS configuration
+const corsOptions = {
+  origin: [
+    process.env.FRONTEND_URL,
+    "http://localhost:3000",
+    "http://localhost:5173", // Vite dev server
+    /\.vercel\.app$/, // Allow all Vercel preview deployments
+    /\.railway\.app$/ // Allow Railway deployments
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 
-app.use(express.json()); //to accept json data
+app.use(cors(corsOptions));
+app.use(express.json());
 
-// app.get("/", (req, res) => {
-//   res.send("API is running");
-// });
-
+// API Routes
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
-//-----------------------Deployment-------------------------------
-
-// const __dirname1 = path.resolve();
-// if(process.env.NODE_ENV === 'production'){
-//   app.use(express.static(path.join(__dirname1, 'frontend/dist')));
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname1, 'frontend/dist', 'index.html'))
-//   })
-// }else{
-//   app.get("/",(req,res) => {
-//     res.send("API is Running Successfully!")
-//   })
-// }
-
-const __dirname1 = path.resolve();
-
+// Serve static files in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname1, "../frontend/dist")));
-
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname1, "../frontend", "dist", "index.html"))
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"))
   );
 } else {
   app.get("/", (req, res) => {
-    res.send("API is Running Successfully!");
+    res.send("API is running successfully");
   });
 }
-//-----------------------Deployment-------------------------------
 
+// Error Handling middlewares
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
-const server = app.listen(
-  PORT,
-  console.log(`Server started on PORT ${PORT}`.yellow.bold)
-);
 
+const server = app.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}`.yellow.bold);
+});
+
+// Socket.io setup
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      process.env.FRONTEND_URL,
+      "http://localhost:3000",
+      "http://localhost:5173",
+      /\.vercel\.app$/,
+      /\.railway\.app$/
+    ],
+    credentials: true,
   },
 });
 
 io.on("connection", (socket) => {
-  console.log("connected to socket.io");
+  console.log("Connected to socket.io");
 
+  // User setup
   socket.on("setup", (userData) => {
-    if (!userData || !userData._id) {
-      console.log("Invalid userData for setup:", userData);
-      return;
-    }
     socket.join(userData._id);
     socket.emit("connected");
   });
 
+  // Join chat room
   socket.on("join chat", (room) => {
     socket.join(room);
+    console.log("User Joined Room: " + room);
   });
 
+  // Typing indicators
+  socket.on("typing", (room) => socket.in(room).emit("typing"));
+  socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
+  // New message
   socket.on("new message", (newMessageReceived) => {
     var chat = newMessageReceived.chat;
 
@@ -100,5 +102,24 @@ io.on("connection", (socket) => {
 
       socket.in(user._id).emit("message received", newMessageReceived);
     });
+  });
+
+  // Video call signaling
+  socket.on("offer", ({ to, offer }) => {
+    socket.to(to).emit("offer", { from: socket.id, offer });
+  });
+
+  socket.on("answer", ({ to, answer }) => {
+    socket.to(to).emit("answer", { answer });
+  });
+
+  socket.on("ice-candidate", ({ target, candidate }) => {
+    socket.to(target).emit("ice-candidate", { candidate });
+  });
+
+  // Disconnect
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
   });
 });

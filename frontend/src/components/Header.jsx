@@ -140,6 +140,15 @@ const Header = () => {
           ref={dropdownRef}
           className="flex items-center gap-4 bg-[#f3f3f3] px-4 py-1 rounded-full text-black relative"
         >
+          <div className="flex items-center gap-2">
+            <img
+              src={user?.pic || "https://i.pravatar.cc/30"}
+              alt="profile"
+              className="rounded-full w-8 h-8 object-cover border-2 border-white shadow-sm"
+            />
+            <span className="text-sm font-medium">{user?.name || "Guest"}</span>
+          </div>
+
           <div className="relative">
             <div
               className="relative p-2 bg-[#d6cce7] rounded-full cursor-pointer"
@@ -196,15 +205,6 @@ const Header = () => {
             }`}
           >
             <FaCog className="text-black" size={18} />
-          </div>
-
-          <div className="flex items-center gap-2">
-            <img
-              src={user?.pic || "https://i.pravatar.cc/30"}
-              alt="profile"
-              className="rounded-full w-8 h-8 object-cover border-2 border-white shadow-sm"
-            />
-            <span className="text-sm font-medium">{user?.name || "Guest"}</span>
           </div>
 
           {showDropdown && (

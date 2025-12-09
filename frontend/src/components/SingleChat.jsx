@@ -166,6 +166,23 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
+
+  const handleVideoCall = () => {
+    if (!selectedChat || !selectedChat.users) return;
+
+    // Your own ID
+    const currentUserId = user._id;
+
+    // Get the other user from the chat
+    const targetUser = selectedChat.users.find((u) => u._id !== currentUserId);
+
+    if (targetUser) {
+      navigate(`/video-call/${targetUser._id}`);
+    } else {
+      console.warn("No target user found for video call.");
+    }
+  };
+
   return selectedChat ? (
     <div className="flex flex-col h-screen w-full bg-white rounded-xl overflow-hidden">
       {/* Header */}
@@ -191,7 +208,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           className="flex gap-4 text-gray-500 text-xl relative"
           ref={menuRef}
         >
-          <i className="fas fa-video cursor-pointer"></i>
+          <i
+            className="fas fa-video cursor-pointer text-xl"
+            onClick={handleVideoCall}
+          />
           <i
             className="fas fa-ellipsis-v cursor-pointer"
             onClick={() => setMenuOpen(!menuOpen)}
