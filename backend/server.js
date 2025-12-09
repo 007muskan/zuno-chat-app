@@ -50,7 +50,15 @@ if (process.env.NODE_ENV === "production") {
   );
 } else {
   app.get("/", (req, res) => {
-    res.send("Zuno Chat API is running successfully! 🚀");
+    res.status(200).json({ 
+      message: "Zuno Chat API is running successfully! 🚀",
+      status: "healthy",
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  app.get("/health", (req, res) => {
+    res.status(200).json({ status: "OK" });
   });
 }
 
@@ -60,8 +68,12 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on PORT ${PORT}`);
+  console.log(`🌐 Health check available at: http://localhost:${PORT}/health`);
+}).on('error', (err) => {
+  console.error('❌ Server failed to start:', err);
+  process.exit(1);
 });
 
 // Socket.io setup
