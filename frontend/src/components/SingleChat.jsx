@@ -7,7 +7,7 @@ import axios from "axios";
 import ProfileModal from "./ProfileModal";
 
 // const ENDPOINT = "http://localhost:5001";
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+const BASE_URL = "https://web-production-1b0bc.up.railway.app";
 let socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

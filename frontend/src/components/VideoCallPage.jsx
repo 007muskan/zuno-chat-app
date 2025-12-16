@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_API_URL || "http://localhost:5001");
+const socket = io("https://web-production-1b0bc.up.railway.app");
 
 const VideoCallPage = () => {
   const { id: targetUserId } = useParams();

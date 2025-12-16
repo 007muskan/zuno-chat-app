@@ -6,7 +6,7 @@ import { ChatState } from "../Context/ChatProvider";
 import axios from "axios";
 import { toast } from "sonner";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+const BASE_URL = "https://web-production-1b0bc.up.railway.app";
 
 const CreateGroupModal = ({ isOpen, onClose }) => {
   const [groupName, setGroupName] = useState("");

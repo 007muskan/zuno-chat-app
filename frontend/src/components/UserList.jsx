@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import CreateGroupModal from "./CreateGroupModal";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+const BASE_URL = "https://web-production-1b0bc.up.railway.app";
 
 const UserList = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState(null);
